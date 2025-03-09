@@ -4,7 +4,7 @@ This package allows you build query and mutations using dynamic declarative synt
 GraphQL syntax. 
 
 ## Current state
-The package is under development.
+Work in progress
 
 ## Usage
 
