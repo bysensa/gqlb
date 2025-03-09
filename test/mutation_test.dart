@@ -9,7 +9,7 @@ void main() {
     final doc = mutation(
       name: "CreateReviewForEpisode",
       () => obj(
-        createReview: obj(
+        new_review: obj.createReview(
           args(
             episode: "JEDI",
             review: input(stars: 5, commentary: "This is a great movie!"),
