@@ -21,8 +21,9 @@ Then import the package:
 import 'package:gqlb/gqlb.dart';
 ```
 
-### Query example
+## Query
 
+### Simple query
 ```dart
 final doc = query(
   name: "HeroQuery", () => obj(
@@ -73,6 +74,37 @@ final doc = query(() {
   }
 );
 ```
+
+## Mutation
+
+### Simple mutation
+```dart
+final doc = mutation(
+  name: "CreateReviewForEpisode",
+      () => obj(
+    new_review: obj.createReview(
+      args(
+        episode: "JEDI",
+        review: input(stars: 5, commentary: "This is a great movie!"),
+      ),
+      stars: unit,
+      commentary: unit,
+    ),
+  ),
+);
+```
+
+### Multiple mutations
+```dart
+final doc = mutation(
+      name: "DeleteStarships",
+      () => obj(
+        firstShip: obj.deleteStarship(args(id: 3001)),
+        secondShip: obj.deleteStarship(args(id: 3002)),
+      ),
+    );
+```
+
 
 ## To Do
 - [x] Query builder
