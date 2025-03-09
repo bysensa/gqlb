@@ -1,6 +1,6 @@
 part of '../../gqlb.dart';
 
-DocumentNode mutation(Node Function() builder, {String? name}) {
+Mutation mutation(Node Function() builder, {String? name}) {
   final node = builder();
   final fragments = <_FragmentNode>[];
   final selectionSet = _processNodes(node, fragments);
@@ -14,5 +14,49 @@ DocumentNode mutation(Node Function() builder, {String? name}) {
   final doc = DocumentNode(
     definitions: [op, ...fragmentDefs],
   );
-  return doc;
+  final errors = validateOperation(doc);
+  assert(
+    errors.isEmpty,
+    'Mutation\n ${printNode(doc)}\nhas errors:\n${errors.join('\n')}',
+  );
+  if (errors.isNotEmpty) {
+    throw MutationException(errors);
+  }
+  return Mutation._(doc);
+}
+
+class Mutation extends Operation {
+  @override
+  final DocumentNode _doc;
+
+  Mutation._(this._doc)
+      : assert(
+          _doc.definitions
+                  .whereType<OperationDefinitionNode>()
+                  .firstOrNull
+                  ?.type ==
+              OperationType.mutation,
+          'Mutation operation is not provided',
+        );
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Mutation &&
+          runtimeType == other.runtimeType &&
+          _doc == other._doc;
+
+  @override
+  int get hashCode => _doc.hashCode;
+}
+
+class MutationException implements Exception {
+  MutationException(this.errors);
+
+  final List<ValidationError> errors;
+
+  @override
+  String toString() {
+    return 'Mutation has errors:\n${errors.join('\n')}';
+  }
 }

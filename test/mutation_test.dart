@@ -19,7 +19,7 @@ void main() {
         ),
       ),
     );
-    print(lang.printNode(doc));
+    print(doc.toStringDebug());
   });
 
   test('multiple mutations', () {
@@ -30,6 +30,6 @@ void main() {
         secondShip: obj.deleteStarship(args(id: 3002)),
       ),
     );
-    print(lang.printNode(doc));
+    print(doc.toStringDebug());
   });
 }

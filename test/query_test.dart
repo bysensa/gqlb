@@ -16,7 +16,7 @@ void main() {
         ),
       ),
     );
-    print(lang.printNode(doc));
+    print(doc.toStringDebug());
   });
 
   test('test complex query', () {
@@ -55,6 +55,6 @@ void main() {
         );
       },
     );
-    print(lang.printNode(doc));
+    print(doc.toStringDebug());
   });
 }
