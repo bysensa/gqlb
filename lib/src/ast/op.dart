@@ -5,4 +5,9 @@ sealed class Operation {
 
   @visibleForTesting
   String toStringDebug() => printNode(_doc);
+
+  @override
+  String toString() {
+    return toStringDebug();
+  }
 }

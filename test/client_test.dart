@@ -28,6 +28,11 @@ void main() {
 class TestTransport with Transport<dynamic> {
   @override
   Future execute(Operation op) async {}
+
+  @override
+  Stream subscribe(Operation op) {
+    return Stream.empty();
+  }
 }
 
 class TestSchemaProvider with SchemaProvider {

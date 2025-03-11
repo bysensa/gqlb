@@ -15,7 +15,7 @@ class GraphQLClient<R> {
     _schema ??= await schemaProvider.schema();
   }
 
-  Future<dynamic> execute(Operation op) async {
+  Future<R> execute(Operation op) async {
     await _ensureSchemaReady();
     final schema = _schema!;
     final errors = validateRequest(schema._doc, op._doc);
@@ -27,6 +27,20 @@ class GraphQLClient<R> {
       throw ExecutionException(errors);
     }
     return await transport.execute(op);
+  }
+
+  Stream<R> subscribe(Subscription op) async* {
+    await _ensureSchemaReady();
+    final schema = _schema!;
+    final errors = validateRequest(schema._doc, op._doc);
+    assert(
+      errors.isEmpty,
+      'Request\n ${printNode(op._doc)}\nhas errors:\n${errors.join('\n')}',
+    );
+    if (errors.isNotEmpty) {
+      throw ExecutionException(errors);
+    }
+    yield* transport.subscribe(op);
   }
 }
 
@@ -62,4 +76,6 @@ mixin SchemaProvider {
 
 mixin Transport<R> {
   Future<R> execute(Operation op);
+
+  Stream<R> subscribe(Operation op);
 }
